@@ -1,2 +1,7 @@
-<h1>footer</h1>
+<footer>
+    <p>&copy; <?php echo date('Y'); ?>- Alibobo corp</p>
+</footer>
+
+</body>
+</html>
 
