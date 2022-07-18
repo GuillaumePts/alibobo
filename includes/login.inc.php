@@ -1,42 +1,55 @@
+<h1>Login</h1>
+
 <?php
-if (isset($_POST['submitted'])) {
-	$email = isset($_POST['email']) ? htmlentities(trim($_POST['email'])) : "";
-	$mdp1 = isset($_POST['mdp1']) ? htmlentities(trim($_POST['mdp1'])) :  "";
-	$mdp2 = isset($_POST['mdp2']) ? htmlentities(trim($_POST['mdp2'])) :  "";
 
-	$errors = [];
-	if (mb_strlen($email) === 0)
-		array_push($errors, "Veuillez saisir une adresse mail");
-	elseif (!(filter_var($email, FILTER_VALIDATE_EMAIL)))
-		array_push($errors, "Veuillez saisir une adresse mail conforme");
-//	if (mb_strlen($mdp1) === 0 || mb_strlen($mdp2) === 0)
-//		array_push($errors, "Veuillez rentrer votre mot de passe dans les deux champs!");
-	if ($mdp1 !== $mdp2)
-		array_push($errors, "Veuillez saisir deux fois le meme mot de passe!");
+if (isset($_POST['frmLogin'])) {
+    $email = isset($_POST['email']) ? htmlentities(trim($_POST['email'])) : "";
+    $mdp = isset($_POST['mdp']) ? htmlentities(trim($_POST['mdp'])) :  "";
 
-	if (count($errors) > 0)
-		affich_eror($errors);
-	else {
-		if (verifier_utilisateur($email))
-			supprimer($email);
-		
-	}
+    $erreurs = array();
+
+    if (mb_strlen($email) === 0)
+        array_push($erreurs, "Veuillez saisir une adresse mail");
+    
+    elseif (!(filter_var($email, FILTER_VALIDATE_EMAIL)))
+        array_push($erreurs, "Veuillez saisir une adresse conforme");
+
+    if (mb_strlen($mdp) === 0)
+        array_push($erreurs, "Veuillez saisir un mot de passe");
+    
+    if (count($erreurs) > 0) {
+        $messageErreurs = "<ul>";
+
+        for ($i = 0 ; $i < count($erreurs) ; $i++) {
+            $messageErreurs .= "<li>";
+            $messageErreurs .= $erreurs[$i];
+            $messageErreurs .= "</li>";
+        }
+
+        $messageErreurs .= "</ul>";
+
+        echo $messageErreurs;
+
+        require './includes/frmLogin.php';
+
+    } else {
+        if (verifierLogin($email,$mdp)) {
+            $recupDatasUser = "SELECT prenom, nom FROM utilisateurs WHERE email='$email'";
+            if ($pdo = pdo()) {
+                $datasUser = $pdo->query($recupDatasUser);
+                $datasUser = $datasUser->fetchAll();
+                $_SESSION['prenom'] = $datasUser[0]['prenom'];
+                $_SESSION['nom'] = $datasUser[0]['nom'];
+            }
+
+            $_SESSION['login'] = true;
+            echo "<script>window.location.replace('http://localhost:8080/DWWM-Vernon-2022-PHP-Alibobo/')</script>";
+        } else {
+            echo "Erreur dans votre login/password";
+        }
+    }
+
+} else {
+    $email = "";
+    require './includes/frmLogin.php';
 }
-
-?>
-	<h1>Login</h1>
-	<form action="" method="post" class="wrap2" id="desinscription"  novalidate>
-        	<label for="email" class="fondnoir">E-mail :</label>
-        	<input class="input" type="email" name="email" id="email" value="<?php if(!empty($_POST['email'])) { echo $_POST['email']; } ?>">
-        	<span class="error"><?php if(!empty($errors['email'])) { echo $errors['email']; } ?></span>
-		
-		<label for="mdp" class="fondnoir">Mot de Passe:</label>
-		<input class="input" type="password" name="mdp" id="mdp" />
-		<span class="error"><?php  ?></span>
-		
-		<label for="mdp2">Verification Mot de Passe :</label>
-		<input class="input" type="password" name="mdp" id="mdp" />
-		<span class="error"><?php ?></span>
-		
-		<input type="submit" name="submitted" value="Supprimer mon compte" id="submit">
-	</form>
