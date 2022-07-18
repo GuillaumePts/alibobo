@@ -1,14 +1,15 @@
 <?php
-// pour determiner notre fuseau horaire = date_default_timezone_get() 
+
+require_once './functions/autoLoad.php';
+autoLoad("*.php");
+
+// Définir le fuseau horaire dans lequel le serveur se trouve
 date_default_timezone_set('Europe/Paris');
 
-require './function/function.php';
-require './includes/header.php';
-require './includes/main.php';
-require './includes/footer.php';
-// _once = ça le fait qu'une fois 
-// require = pareil mais stricte une erreur et plus rien marche include meme si erreur ça passe
-
-echo $_SERVER["SERVER_SOFTWARE"];
-
-// dump($_SERVER);
+/* Utiliser include ou require
+* include renvoie un avertissement simple en cas d'erreur
+* require renvoie une erreur fatale et arrête l'exécution du script
+*/
+require_once './includes/header.php';
+require_once './includes/main.php';
+require_once './includes/footer.php';

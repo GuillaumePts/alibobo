@@ -1,7 +1,5 @@
 <footer>
-    <p>&copy; <?php echo date('Y'); ?>- Alibobo corp</p>
-</footer>
-
+    <p>&copy; <?php echo date('Y'); ?> - Alibobo Corporation</p>
+</footer>   
 </body>
 </html>
-

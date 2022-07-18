@@ -1,1 +1,1 @@
-<h1>articles</h1>
+<h1>Articles</h1>

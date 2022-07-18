@@ -1,4 +1,6 @@
-h1{
-    
-    color: #fff;
+main {
+    min-height: 500px;
+    background-color: #DDD;
+    width: 80%;
+    margin: 0 auto;
 }
